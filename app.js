@@ -4,6 +4,7 @@ var bodyParser = require("body-parser");
 const app = express();
 const path = require("path");
 const mongooseConnection = require("./src/db/mongoose");
+const passport = require("passport")
 const listEndpoints = require("express-list-endpoints");
 require("dotenv").config();
 const port = process.env.PORT;
@@ -11,7 +12,7 @@ mongooseConnection();
 const experienceRouter = require("./src/route/experience");
 const profileRouter = require("./src/route/profile");
 const postRouter = require("./src/route/post");
-const authRouter = require("./src/route/auth")
+const userRouter = require("./src/route/auth")
 const { basic, adminOnly, setUserInfo } = require("./src/helpers/auth")
 
 app.use(bodyParser.json());
@@ -27,17 +28,18 @@ var corsOptions = {
     }
   }
 };
+app.use(passport.initialize())
 app.use(cors(corsOptions));
-app.use("/auth", authRouter)
+app.use("/user", userRouter)
 
 // app.use(express.json());
 
 app.get("/", (req, res) => res.send("LinkedIn Profile"));
 
-app.get("/test", basic, setUserInfo, (req, res, next) => {
+/* app.get("/test", basic, setUserInfo, (req, res, next) => {
   res.send("Ok")
 });
-
+ */
 //server.use("/images", express.static(path.join(__dirname, "images")))
 app.use("/images", express.static(path.join(__dirname, "images")))
 app.use("/experiences", experienceRouter);

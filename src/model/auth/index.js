@@ -5,7 +5,8 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const userSchema = new Schema({
     role: {
         type: String,
-        required: true
+        required: true,
+        facebookID: String
     }
 });
  
